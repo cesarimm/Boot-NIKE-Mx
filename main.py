@@ -16,6 +16,44 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions as EC
 
+NIKE_LOGIN_MX = "https://www.nike.com/mx/login"
+
+def ejecutar(driver, usuario, password, url, talla_snkr,  tiempo_maximo=None, hora_lanzamiento=None,
+        direccion_envio=None, cvv=None):
+
+    print(usuario)
+    print(password)
+    login(driver, usuario, password)
+
+    input("Presione enter para quitar...")
+    driver.quit()
+
+
+
+def login(driver, usuario, password):
+    try:
+        driver.get(NIKE_LOGIN_MX)
+    except TimeoutException:
+        print("A fallado al iniciar sesión")
+
+    time.sleep(3)
+
+    print("Ingresando credenciales de acces")
+    email_input = driver.find_element_by_xpath("//input[@name='emailAddress']")
+    email_input.clear()
+    email_input.send_keys(usuario)
+
+    password_input = driver.find_element_by_xpath("//input[@name='password']")
+    password_input.clear()
+    password_input.send_keys(password)
+
+    print("Accediendo.... Accediendo...")
+    driver.find_element_by_xpath("/html/body/div[2]/div[3]/div[7]/form/div[6]/input").click();
+
+    #wait_until_visible(driver=driver, xpath="//a[@data-path='myAccount:greeting']", duration=5)
+
+    #LOGGER.info("Successfully logged in")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -68,4 +106,5 @@ if __name__ == "__main__":
         raise Exception("Specified web browser not supported, only Firefox and Chrome are supported at this point")
 
 
-    driver.get("https://www.nike.com/mx/")
+    ejecutar(driver=driver, usuario=args.usuario, password=args.password, url=args.url, talla_snkr=args.talla_snkr,  tiempo_maximo=args.tiempo_maximo, hora_lanzamiento=args.hora_lanzamiento,
+            direccion_envio=args.direccion_envio, cvv=args.cvv)
